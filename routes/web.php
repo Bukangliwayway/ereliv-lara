@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedisController;
 use App\Http\Controllers\GoogleProviderController;
-use App\Http\Middleware\Admin;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +29,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+
+    // Reader routes
+    Route::middleware('reader')->group(function () {
+        Route::get('/reader/dashboard', function () {
+            return Inertia::render('Reader/Dashboard');
+        })->name('reader.dashboard');
+    });
+
     // Admin routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin/dashboard', function () {
@@ -37,14 +44,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.dashboard');
     });
 
-    // Faculty routes
-    Route::middleware('faculty')->group(function () {
-        Route::get('/faculty/dashboard', function () {
-            return Inertia::render('Faculty/Dashboard');
-        })->name('faculty.dashboard');
+    // Researcher routes
+    Route::middleware('researcher')->group(function () {
+        Route::get('/researcher/dashboard', function () {
+            return Inertia::render('Researcher/Dashboard');
+        })->name('researcher.dashboard');
     });
-});
 
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

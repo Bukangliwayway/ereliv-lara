@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('role', ['viewer', 'researcher', 'admin'])->default('viewer');
+            $table->enum('role', ['reader', 'researcher', 'admin'])->default('reader');
             $table->string('password');
             $table->string('provider')->nullable();
             $table->string('provider_token')->nullable();

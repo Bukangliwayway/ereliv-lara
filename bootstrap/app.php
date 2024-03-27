@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias(['admin' => App\Http\Middleware\Admin::class, 'faculty' => App\Http\Middleware\Faculty::class]);
+        $middleware->alias([
+            'admin' => App\Http\Middleware\Admin::class,
+            'researcher' => App\Http\Middleware\Researcher::class,
+            'reader' => App\Http\Middleware\Reader::class,
+        ]);
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,

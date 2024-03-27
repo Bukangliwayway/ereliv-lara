@@ -23,37 +23,43 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->configureRateLimiting();
+        // $this->configureRateLimiting();
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+        // $this->routes(function () {
+        //     Route::middleware('api')
+        //         ->prefix('api')
+        //         ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+        //     Route::middleware('web')
+        //         ->group(base_path('routes/web.php'));
+        // });
 
-        Route::middleware('admin')->group(function () {
-            Route::bind('admin', function ($value) {
-                return \App\Models\User::where('role', 'admin')->findOrFail($value);
-            });
-        });
+        // Route::middleware('admin')->group(function () {
+        //     Route::bind('admin', function ($value) {
+        //         return \App\Models\User::where('role', 'admin')->findOrFail($value);
+        //     });
+        // });
 
-        Route::middleware('faculty')->group(function () {
-            Route::bind('faculty', function ($value) {
-                return \App\Models\User::where('role', 'faculty')->findOrFail($value);
-            });
-        });
+        // Route::middleware('reader')->group(function () {
+        //     Route::bind('reader', function ($value) {
+        //         return \App\Models\Reader::where('role', 'reader')->findOrFail($value);
+        //     });
+        // });
+
+        // Route::middleware('researcher')->group(function () {
+        //     Route::bind('researcher', function ($value) {
+        //         return \App\Models\User::where('role', 'researcher')->findOrFail($value);
+        //     });
+        // });
     }
 
     /**
      * Configure the rate limiters for the application.
      */
-    protected function configureRateLimiting(): void
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-    }
+    // protected function configureRateLimiting(): void
+    // {
+    //     RateLimiter::for('api', function (Request $request) {
+    //         return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+    //     });
+    // }
 }
