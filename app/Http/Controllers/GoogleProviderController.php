@@ -19,28 +19,26 @@ class GoogleProviderController extends Controller
     {
         try {
             $user = Socialite::driver('google')->user();
-
             // Check if the user already exists in the database
-            $existingUser = User::where('email', $user->getEmail())->first();
+            $userInstance = User::where('email', $user->getEmail())->first();
 
-            if ($existingUser) {
+            if ($userInstance) {
+                $role = $userInstance->role;
                 // If the user exists and has a provider ID and provider details, login the user
-                if ($existingUser->provider_id && $existingUser->provider) {
-                    Auth::login($existingUser);
-                    return redirect('/dashboard');
+                if (!$userInstance->provider_id || !$userInstance->provider) {
+                    Auth::login($userInstance);
+                } else {
+                    // If the user exists but doesn't have provider ID and provider details, update the record
+                    $userInstance->provider_id = $user->id;
+                    $userInstance->provider = 'google';
+                    $userInstance->provider_token = $user->token;
+                    $userInstance->save();
+                    Auth::login($userInstance);
                 }
-
-                // If the user exists but doesn't have provider ID and provider details, update the record
-                $existingUser->provider_id = $user->id;
-                $existingUser->provider = 'google';
-                $existingUser->provider_token = $user->token;
-                $existingUser->save();
-
-                Auth::login($existingUser);
-                return redirect('/dashboard');
             } else {
+                $role = 'reader';
                 // If the user doesn't exist, create a new record
-                $newUser = User::create([
+                $userInstance = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     'password' => Hash::make(Str::random(10)),
@@ -50,11 +48,21 @@ class GoogleProviderController extends Controller
                     'provider' => 'google',
                     'provider_token' => $user->token,
                 ]);
-
-                Auth::login($newUser);
-                return redirect('/dashboard');
+                Auth::login($userInstance);
             }
+
+
+            $redirectTo = match ($role) {
+                'reader' => 'reader.dashboard',
+                'researcher' => 'researcher.dashboard',
+                'admin' => 'admin.dashboard',
+                default => '/',
+            };
+
+            return redirect()->intended(route($redirectTo));
+
         } catch (\Exception $e) {
+            dd($e);
             return redirect('/login');
         }
     }
