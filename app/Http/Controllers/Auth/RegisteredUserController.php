@@ -40,14 +40,15 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'reader',
         ]);
 
         event(new Registered($user));
 
+        $role = $user->fresh()->role;
+
         Auth::login($user);
-        
-        switch ($user->role) {
+
+        switch ($role) {
             case 'reader':
                 return redirect()->intended(route('reader.dashboard', absolute: false));
             case 'researcher':

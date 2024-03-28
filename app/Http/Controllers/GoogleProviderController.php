@@ -36,7 +36,6 @@ class GoogleProviderController extends Controller
                     Auth::login($userInstance);
                 }
             } else {
-                $role = 'reader';
                 // If the user doesn't exist, create a new record
                 $userInstance = User::create([
                     'name' => $user->name,
@@ -51,6 +50,7 @@ class GoogleProviderController extends Controller
                 Auth::login($userInstance);
             }
 
+            $role = $userInstance->fresh()->role;
 
             $redirectTo = match ($role) {
                 'reader' => 'reader.dashboard',
