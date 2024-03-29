@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('paper_revisions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('revisor_id')->constrained('users');
+            $table->foreignUuid('user_id')->constrained('users');
             $table->foreignUuid('research_paper_id')->constrained('research_papers');
             $table->timestamps();
         });

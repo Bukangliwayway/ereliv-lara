@@ -1,8 +1,13 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { PageProps } from "@/types";
+import { toast } from "sonner";
+import { useLoadingStore } from "@/store";
+import { Button } from "@/shadcn/ui/button";
+import { LoadingScreen } from "@/Components/LoadingScreen";
 
 export default function Dashboard({ auth }: PageProps) {
+    const toggleLoading = useLoadingStore((state) => state.toggleIsLoading);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -20,6 +25,22 @@ export default function Dashboard({ auth }: PageProps) {
                         <div className="p-6 text-gray-900">
                             Only the Reader shall access this
                         </div>
+                        <Button
+                            variant="outline"
+                            onClick={() =>
+                                toast("Event has been created", {
+                                    description:
+                                        "Sunday, December 03, 2023 at 9:00 AM",
+                                    action: {
+                                        label: "Undo",
+                                        onClick: () => console.log("Undo"),
+                                    },
+                                })
+                            }
+                        >
+                            Show Toast
+                        </Button>
+                        <Button onClick={toggleLoading}>click me!</Button>
                     </div>
                 </div>
             </div>

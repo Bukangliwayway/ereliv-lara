@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -12,9 +13,9 @@ return new class extends Migration {
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('author_id')->constrained('users');
-            $table->foreignUuid('research_paper_id')->constrained('research_papers');
             $table->timestamps();
+            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('research_paper_id')->constrained('research_papers');
         });
     }
 

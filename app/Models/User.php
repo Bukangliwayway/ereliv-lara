@@ -28,6 +28,13 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    public function researchPapers()
+    {
+        return $this->belongsToMany(ResearchPaper::class, 'authors')
+            ->withPivot('id')
+            ->withTimestamps();
+    }
+
     protected $keyType = 'string';
 
     /**

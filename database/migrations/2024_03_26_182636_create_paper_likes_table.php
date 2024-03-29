@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('paper_likes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->boolean('is_liked')->default(true);
-            $table->foreignUuid('liker_id')->constrained('users');
+            $table->foreignUuid('user_id')->constrained('users');
             $table->foreignUuid('research_paper_id')->constrained('research_papers');
             $table->timestamps();
         });

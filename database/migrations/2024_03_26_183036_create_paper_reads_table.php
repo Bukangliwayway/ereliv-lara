@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->boolean('is_read')->default(true);
             $table->foreignUuid('reader_id')->constrained('users');
-            $table->foreignUuid('research_paper_id')->constrained('research_papers');
+            $table->foreignUuid('research_paper_id')->constrained('research_papers')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

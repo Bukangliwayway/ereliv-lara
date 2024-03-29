@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ResearchPaper;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,9 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $researchPapers = ResearchPaper::factory()->count(10)->create();
+
+        // For each research paper, create 2 authors
+        foreach ($researchPapers as $researchPaper) {
+            $authors = User::factory()->count(2)->create();
+            $researchPaper->authors()->attach($authors->pluck('id')->toArray());
+        }
     }
 }
