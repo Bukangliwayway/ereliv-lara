@@ -59,6 +59,8 @@ class GoogleProviderController extends Controller
                 default => '/',
             };
 
+            // dd($redirectTo);
+
             return redirect()->intended(route($redirectTo));
 
         } catch (\Exception $e) {

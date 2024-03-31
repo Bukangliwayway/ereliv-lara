@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedisController;
 use App\Http\Controllers\GoogleProviderController;
+use App\Http\Controllers\ResearchPaperController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,6 +26,8 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
+
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -50,6 +53,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('Researcher/Dashboard');
         })->name('researcher.dashboard');
     });
+
+    Route::resource('task', ResearchPaperController::class);
 
 });
 
