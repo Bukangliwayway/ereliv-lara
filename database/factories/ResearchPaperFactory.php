@@ -18,6 +18,7 @@ class ResearchPaperFactory extends Factory
     public function definition(): array
     {
         return [
+            'title' => fake()->sentence(15),
             'introduction' => fake()->realText(),
             'methodology' => fake()->realText(),
             'result' => fake()->realText(),

@@ -20,9 +20,12 @@ class ResearchPaper extends Model
             ->withTimestamps();
     }
 
-    public function modifiedBy()
+    public function authorNames()
     {
-        return $this->belongsTo(User::class, 'modifier_id');
+        return $this->belongsToMany(User::class, 'authors', 'research_paper_id', 'user_id')
+            ->using(AuthorPivot::class)
+            ->withTimestamps()
+            ->pluck('name');
     }
 }
 

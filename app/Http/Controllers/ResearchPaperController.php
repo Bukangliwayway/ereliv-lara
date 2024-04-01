@@ -15,9 +15,13 @@ class ResearchPaperController extends Controller
     public function index()
     {
         $query = ResearchPaper::query();
-        $researches = $query->paginate(10);
+        $researches = $query->paginate(5);
+        $resourceCollection = ResearchPaperResource::collection($researches);
+
+        // dd(ResearchPaperResource::collection($researches)->response()->getData(true));
+
         return inertia("Researches/Index", [
-            'researches' => ResearchPaperResource::collection($researches),
+            'researches' => $resourceCollection,
         ]);
     }
 

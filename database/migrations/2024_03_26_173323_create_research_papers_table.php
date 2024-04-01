@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('research_papers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamps();
+            $table->text('title');
             $table->text('introduction');
             $table->text('methodology');
             $table->text('result');
@@ -20,7 +21,6 @@ return new class extends Migration {
             $table->text('discussion');
             $table->text('conclusion');
             $table->text('keywords');
-            $table->boolean('is_active')->default(true);
             $table->enum('publication_status', ['Ongoing', 'Completed', 'Published', 'Presented']);
             $table->enum('research_classification', ['Institutional Research', 'Self-Funded Research', 'Externally Funded Research']);
             $table->date('publish_date');

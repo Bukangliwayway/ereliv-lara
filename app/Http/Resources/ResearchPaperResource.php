@@ -17,18 +17,12 @@ class ResearchPaperResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'introduction' => $this->introduction,
-            'methodology' => $this->methodology,
-            'result' => $this->result,
+            'title' => $this->title,
             'abstract' => $this->abstract,
-            'discussion' => $this->discussion,
-            'conclusion' => $this->conclusion,
-            'keywords' => $this->keywords,
-            'is_active' => $this->is_active,
             'publication_status' => $this->publication_status,
             'research_classification' => $this->research_classification,
             'publish_date' => (new Carbon($this->publish_date))->format('m-d-Y'),
-            'modified_by' => $this->modifiedBy,
+            'authors' => $this->authorNames(),
         ];
     }
 }
