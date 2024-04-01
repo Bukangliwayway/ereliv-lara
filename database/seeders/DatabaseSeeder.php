@@ -14,14 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        $existingUsers = User::factory(25)->create();
 
-        $researchPapers = ResearchPaper::factory()->count(10)->create();
+        $researchPapers = ResearchPaper::factory()->count(100)->create();
 
         // For each research paper, create 2 authors
         foreach ($researchPapers as $researchPaper) {
-            $authors = User::factory()->count(2)->create();
-            $researchPaper->authors()->attach($authors->pluck('id')->toArray());
+            $randomUserIds = $existingUsers->random(rand(1, 5))->pluck('id')->toArray();
+            $researchPaper->authors()->attach($randomUserIds);
         }
     }
 }

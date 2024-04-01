@@ -20,7 +20,7 @@ class ResearchPaperController extends Controller
 
         // dd(ResearchPaperResource::collection($researches)->response()->getData(true));
 
-        return inertia("Researches/Index", [
+        return inertia("Researches/Page", [
             'researches' => $resourceCollection,
         ]);
     }
