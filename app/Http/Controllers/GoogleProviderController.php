@@ -50,21 +50,9 @@ class GoogleProviderController extends Controller
                 Auth::login($userInstance);
             }
 
-            $role = $userInstance->fresh()->role;
-
-            $redirectTo = match ($role) {
-                'reader' => 'reader.dashboard',
-                'researcher' => 'researcher.dashboard',
-                'admin' => 'admin.dashboard',
-                default => '/',
-            };
-
-            // dd($redirectTo);
-
-            return redirect()->intended(route($redirectTo));
+            return redirect()->intended(route('dashboard', absolute: false));
 
         } catch (\Exception $e) {
-            dd($e);
             return redirect('/login');
         }
     }

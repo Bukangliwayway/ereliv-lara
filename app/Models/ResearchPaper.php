@@ -19,7 +19,14 @@ class ResearchPaper extends Model
             ->withPivot('id')
             ->withTimestamps();
     }
+
+    public function modifiedBy()
+    {
+        return $this->belongsTo(User::class, 'modifier_id');
+    }
 }
+
+
 
 
 class AuthorPivot extends Pivot

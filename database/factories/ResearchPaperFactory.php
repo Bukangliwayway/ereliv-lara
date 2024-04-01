@@ -28,7 +28,7 @@ class ResearchPaperFactory extends Factory
             'publication_status' => fake()->randomElement(['Ongoing', 'Completed', 'Published', 'Presented']),
             'research_classification' => fake()->randomElement(['Institutional Research', 'Self-Funded Research', 'Externally Funded Research']),
             'publish_date' => fake()->dateTimeBetween('-2 years', 'now'),
-            'modified_by' => function () {
+            'modifier_id' => function () {
                 return User::inRandomOrder()->first()->id;
             },
         ];

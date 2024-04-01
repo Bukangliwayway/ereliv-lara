@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResearchPaperRequest;
 use App\Http\Requests\UpdateResearchPaperRequest;
+use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 
 class ResearchPaperController extends Controller
@@ -13,7 +14,11 @@ class ResearchPaperController extends Controller
      */
     public function index()
     {
-        //
+        $query = ResearchPaper::query();
+        $researches = $query->paginate(10);
+        return inertia("Researches/Index", [
+            'researches' => ResearchPaperResource::collection($researches),
+        ]);
     }
 
     /**

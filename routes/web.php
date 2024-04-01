@@ -26,35 +26,31 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
-
-
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    // Route::get('/researches', [ResearchPaperController::class, 'index'])->name('researches.index');
 
     // Reader routes
-    Route::middleware('reader')->group(function () {
-        Route::get('/reader/dashboard', function () {
-            return Inertia::render('Reader/Dashboard');
-        })->name('reader.dashboard');
-    });
+    Route::middleware('CheckRole:reader')->group(function () {
 
-    // Admin routes
-    Route::middleware('admin')->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return Inertia::render('Admin/Dashboard');
-        })->name('admin.dashboard');
     });
 
     // Researcher routes
-    Route::middleware('researcher')->group(function () {
-        Route::get('/researcher/dashboard', function () {
-            return Inertia::render('Researcher/Dashboard');
-        })->name('researcher.dashboard');
+    Route::middleware('CheckRole:researcher')->group(function () {
+        Route::resource('researches', ResearchPaperController::class)->except(['index']);
     });
 
-    Route::resource('task', ResearchPaperController::class);
+    // Admin routes
+    Route::middleware('CheckRole:admin')->group(function () {
+
+    });
+
+    Route::middleware('CheckRole:researcher|reader')->group(function () {
+        Route::resource('researches', ResearchPaperController::class)->only(['index']);
+    });
+
 
 });
 

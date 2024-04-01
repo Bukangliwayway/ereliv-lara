@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->enum('publication_status', ['Ongoing', 'Completed', 'Published', 'Presented']);
             $table->enum('research_classification', ['Institutional Research', 'Self-Funded Research', 'Externally Funded Research']);
             $table->date('publish_date');
-            $table->foreignUuid('modified_by')->constrained('users');
+            $table->foreignUuid('modifier_id')->constrained('users');
         });
     }
 

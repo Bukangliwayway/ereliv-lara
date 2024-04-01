@@ -47,16 +47,6 @@ class RegisteredUserController extends Controller
         $role = $user->fresh()->role;
 
         Auth::login($user);
-
-        switch ($role) {
-            case 'reader':
-                return redirect()->intended(route('reader.dashboard', absolute: false));
-            case 'researcher':
-                return redirect()->intended(route('researcher.dashboard', absolute: false));
-            case 'admin':
-                return redirect()->intended(route('admin.dashboard', absolute: false));
-            default:
-                return redirect()->intended('/');
-        }
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }
