@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResearchPaperRequest;
 use App\Http\Requests\UpdateResearchPaperRequest;
+use App\Http\Resources\AuthorResource;
 use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
+use App\Models\Author;
 
 class ResearchPaperController extends Controller
 {
@@ -14,14 +16,29 @@ class ResearchPaperController extends Controller
      */
     public function index()
     {
+        // $queryAuthors = Author::select('users.id', 'users.name')
+        //     ->distinct('users.id')
+        //     ->join('users', 'authors.user_id', '=', 'users.id')
+        //     ->get();
+        // dd($queryAuthors);
+
         $query = ResearchPaper::query();
         $researches = $query->paginate(5);
-        $resourceCollection = ResearchPaperResource::collection($researches);
+        $researchesCollection = ResearchPaperResource::collection($researches);
+
+        $distinctAuthors = Author::select('user_id')
+            ->distinct('user_id')
+            ->get();
+
+        $authorsCollection = AuthorResource::collection($distinctAuthors);
+
+        dd(AuthorResource::collection($distinctAuthors)->response()->getData(true));
 
         // dd(ResearchPaperResource::collection($researches)->response()->getData(true));
 
         return inertia("Researches/Page", [
-            'researches' => $resourceCollection,
+            'researches' => $researchesCollection,
+            'authors' => $authorsCollection,
         ]);
     }
 

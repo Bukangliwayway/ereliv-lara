@@ -22,7 +22,7 @@ export function Paginate({ meta, links }: any) {
         </PaginationItem>
         {meta.links.slice(1, 11).map((link: any) => (
           <PaginationItem>
-            <PaginationLink href={link.url} isActive={link.active}>
+            <PaginationLink preserveScroll href={link.url} isActive={link.active}>
               {link.label == "..." ? <PaginationEllipsis /> : link.label}
             </PaginationLink>
           </PaginationItem>

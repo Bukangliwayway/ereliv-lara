@@ -12,4 +12,10 @@ class Author extends Model
 
   protected $fillable = ['research_paper_id', 'user_id'];
 
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
+
 }
