@@ -23,8 +23,11 @@ export interface AuthorName {
     user_id: string;
 }
 
-export interface Years{
+export interface Years {
     year: string;
+}
+export interface QueryParams {
+    [key: string]: string | null;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
@@ -43,5 +46,8 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         };
         years: {
             data: Years[];
+        };
+        queryParams: {
+            [key: string]: string | null;
         };
     };

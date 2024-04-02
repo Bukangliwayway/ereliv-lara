@@ -8,6 +8,7 @@ use App\Http\Resources\AuthorNamesResource;
 use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 use App\Models\Author;
+use Illuminate\Support\Arr;
 
 class ResearchPaperController extends Controller
 {
@@ -18,8 +19,6 @@ class ResearchPaperController extends Controller
     {
 
         $query = ResearchPaper::query();
-        $researches = $query->paginate(5);
-        $researchesCollection = ResearchPaperResource::collection($researches);
 
         $distinctAuthors = Author::select('user_id')
             ->distinct('user_id')
@@ -37,6 +36,34 @@ class ResearchPaperController extends Controller
             })
             ->toArray();
 
+        if (request('author')) {
+            $userId = request('author');
+            $query->whereHas('authors', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            });
+        }
+
+        if (request('year')) {
+            $year = request('year');
+            $query->whereYear('publish_date', '=', $year);
+        }
+
+        if (request('keyword')) {
+            $keyword = request('keyword');
+            $columns = ['title', 'abstract', 'keywords'];
+            $query->where(function ($query) use ($columns, $keyword) {
+                foreach (Arr::wrap($keyword) as $value) {
+                    $query->orWhereRaw("to_tsvector(concat_ws(' ', ?, ?, ?)) @@ to_tsquery(?)", $columns, $value);
+                }
+            });
+        }
+
+
+
+
+
+        $researches = $query->paginate(5);
+        $researchesCollection = ResearchPaperResource::collection($researches);
         $yearsCollection = ['data' => $distinctYears];
         $authorsCollection = AuthorNamesResource::collection($distinctAuthors);
 

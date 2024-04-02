@@ -18,11 +18,15 @@ export function Paginate({ meta, links }: any) {
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href={links.prev} />
+          <PaginationPrevious href={links.prev} preserveScroll />
         </PaginationItem>
         {meta.links.slice(1, 11).map((link: any) => (
           <PaginationItem>
-            <PaginationLink preserveScroll href={link.url} isActive={link.active}>
+            <PaginationLink
+              preserveScroll
+              href={link.url}
+              isActive={link.active}
+            >
               {link.label == "..." ? <PaginationEllipsis /> : link.label}
             </PaginationLink>
           </PaginationItem>
@@ -32,6 +36,7 @@ export function Paginate({ meta, links }: any) {
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
+            preserveScroll
             href={meta.links[meta.links.length - 2].url}
             isActive={meta.links[meta.links.length - 2].active}
           >
@@ -40,7 +45,7 @@ export function Paginate({ meta, links }: any) {
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationNext href={links.next} />
+          <PaginationNext href={links.next} preserveScroll />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
