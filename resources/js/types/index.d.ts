@@ -8,7 +8,6 @@ export interface User {
     email_verified_at: string;
 }
 
-
 export interface Research {
     id: UUID;
     title: string;
@@ -17,6 +16,15 @@ export interface Research {
     research_classification: string;
     publish_date: string;
     authors: string[];
+}
+
+export interface AuthorName {
+    name: string;
+    user_id: string;
+}
+
+export interface Years{
+    year: string;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
@@ -30,4 +38,10 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
             meta: {};
         };
         meta: {};
+        authors: {
+            data: AuthorName[];
+        };
+        years: {
+            data: Years[];
+        };
     };

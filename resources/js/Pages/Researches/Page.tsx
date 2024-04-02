@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { PageProps } from "@/types";
+import { AuthorName, PageProps } from "@/types";
 import { Button } from "@/shadcn/ui/button";
 import { Input } from "@/shadcn/ui/input";
 import {
@@ -15,8 +15,9 @@ import { Search } from "lucide-react";
 import { Research } from "@/types";
 import { Paginate } from "@/Components/Paginate";
 
-export default function Page({ auth, researches }: PageProps) {
-  console.log(researches);
+export default function Page({ auth, researches, authors, years }: PageProps) {
+  const valuesArray = Object.values(years.data);
+  console.log(Array.isArray(valuesArray));
 
   return (
     <AuthenticatedLayout user={auth.user}>
@@ -29,24 +30,18 @@ export default function Page({ auth, researches }: PageProps) {
                 <SelectValue placeholder="Author" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
-                <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
-                <SelectItem value="mst">
-                  Mountain Standard Time (MST)
-                </SelectItem>
-                <SelectItem value="pst">Pacific Standard Time (PST)</SelectItem>
-                <SelectItem value="akst">
-                  Alaska Standard Time (AKST)
-                </SelectItem>
-                <SelectItem value="hst">Hawaii Standard Time (HST)</SelectItem>
-                <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-                <SelectItem value="cet">Central European Time (CET)</SelectItem>
-                <SelectItem value="eet">Eastern European Time (EET)</SelectItem>
-                <SelectItem value="fjt">Fiji Time (FJT)</SelectItem>
-                <SelectItem value="art">Argentina Time (ART)</SelectItem>
-                <SelectItem value="bot">Bolivia Time (BOT)</SelectItem>
-                <SelectItem value="brt">Brasilia Time (BRT)</SelectItem>
-                <SelectItem value="clt">Chile Standard Time (CLT)</SelectItem>
+                {authors.data
+                  .sort((a: any, b: any) => {
+                    // Ensure both a.name and b.name are strings before comparing
+                    const nameA = a.name ? a.name.toString() : "";
+                    const nameB = b.name ? b.name.toString() : "";
+                    return nameA.localeCompare(nameB);
+                  })
+                  .map((author) => (
+                    <SelectItem key={author.user_id} value={author.user_id}>
+                      {author.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
             <Select>
@@ -54,24 +49,13 @@ export default function Page({ auth, researches }: PageProps) {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
-                <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
-                <SelectItem value="mst">
-                  Mountain Standard Time (MST)
-                </SelectItem>
-                <SelectItem value="pst">Pacific Standard Time (PST)</SelectItem>
-                <SelectItem value="akst">
-                  Alaska Standard Time (AKST)
-                </SelectItem>
-                <SelectItem value="hst">Hawaii Standard Time (HST)</SelectItem>
-                <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-                <SelectItem value="cet">Central European Time (CET)</SelectItem>
-                <SelectItem value="eet">Eastern European Time (EET)</SelectItem>
-                <SelectItem value="fjt">Fiji Time (FJT)</SelectItem>
-                <SelectItem value="art">Argentina Time (ART)</SelectItem>
-                <SelectItem value="bot">Bolivia Time (BOT)</SelectItem>
-                <SelectItem value="brt">Brasilia Time (BRT)</SelectItem>
-                <SelectItem value="clt">Chile Standard Time (CLT)</SelectItem>
+                {Object.values(years.data)
+                  .sort((a: any, b: any) => b.year - a.year)
+                  .map((value: any, index: number) => (
+                    <SelectItem key={index} value={value.year}>
+                      {value.year}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

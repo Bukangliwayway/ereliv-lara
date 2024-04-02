@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResearchPaperRequest;
 use App\Http\Requests\UpdateResearchPaperRequest;
-use App\Http\Resources\AuthorResource;
+use App\Http\Resources\AuthorNamesResource;
 use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 use App\Models\Author;
@@ -16,11 +16,6 @@ class ResearchPaperController extends Controller
      */
     public function index()
     {
-        // $queryAuthors = Author::select('users.id', 'users.name')
-        //     ->distinct('users.id')
-        //     ->join('users', 'authors.user_id', '=', 'users.id')
-        //     ->get();
-        // dd($queryAuthors);
 
         $query = ResearchPaper::query();
         $researches = $query->paginate(5);
@@ -30,15 +25,28 @@ class ResearchPaperController extends Controller
             ->distinct('user_id')
             ->get();
 
-        $authorsCollection = AuthorResource::collection($distinctAuthors);
+        $distinctYears = ResearchPaper::selectRaw("DISTINCT EXTRACT(YEAR FROM publish_date) AS year")
+            ->get()
+            ->pluck('year')
+            ->map(function ($year) {
+                return (int) $year; // Cast to integer
+            })
+            ->sortDesc() // Sort in descending order
+            ->map(function ($year) {
+                return ['year' => $year];
+            })
+            ->toArray();
 
-        dd(AuthorResource::collection($distinctAuthors)->response()->getData(true));
+        $yearsCollection = ['data' => $distinctYears];
+        $authorsCollection = AuthorNamesResource::collection($distinctAuthors);
 
+        // dd($yearsCollection, $authorsCollection->response()->getData(true));
         // dd(ResearchPaperResource::collection($researches)->response()->getData(true));
 
         return inertia("Researches/Page", [
             'researches' => $researchesCollection,
             'authors' => $authorsCollection,
+            'years' => $yearsCollection,
         ]);
     }
 
