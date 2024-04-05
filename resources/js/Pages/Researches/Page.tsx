@@ -3,8 +3,9 @@ import { Head, router } from "@inertiajs/react";
 import { AuthorName, PageProps, QueryParams } from "@/types";
 import { Button } from "@/shadcn/ui/button";
 import { Input } from "@/shadcn/ui/input";
+import Select from "react-select";
 import {
-  Select,
+  // Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -30,20 +31,15 @@ export default function Page({
 }: PageProps) {
   queryParams = queryParams || {};
 
-  const [params, setParams] = useState<QueryParams | null>(initialQueryParams);
-
-  // const searchParamsUpdate = (name: string, value: string | null) => {
-  //   setParams((prevParams) => ({
-  //     ...prevParams,
-  //     [name]: value,
-  //   }));
-
-  //   router.get(route("research.index"), params);
-  // };
-
-  const searchParamsUpdate = (name: string, value: string | null) => {
-    queryParams[name] = value;
-
+  const searchParamsUpdate = (
+    name: string,
+    value: string | string[] | null
+  ) => {
+    if (name === "author" || name === "year") {
+      queryParams[name] = Array.isArray(value) ? value.join(",") : value;
+    } else {
+      queryParams[name] = value as string | null;
+    }
     router.get(route("researches.index"), queryParams);
   };
 
@@ -52,52 +48,107 @@ export default function Page({
       <Head title="Researches" />
       <div className="flex flex-col gap-4 max-w-2xl mx-auto py-4">
         <div className="bg-white overflow-hidden  shadow-sm sm:rounded-lg p-4 flex">
-          <div className="space-x-2 flex">
+          <div className="space-x-2 flex items-center"> {/* Added 'items-center' class */}
             <Select
-              onValueChange={(value) => searchParamsUpdate("author", value)}
-            >
-              <SelectTrigger className="w-32">
-                <SelectValue placeholder="Author" />
-              </SelectTrigger>
-              <SelectContent>
-                {authors.data
-                  .sort((a: any, b: any) => {
-                    // Ensure both a.name and b.name are strings before comparing
-                    const nameA = a.name ? a.name.toString() : "";
-                    const nameB = b.name ? b.name.toString() : "";
-                    return nameA.localeCompare(nameB);
-                  })
-                  .map((author) => (
-                    <SelectItem
-                      key={author.user_id}
-                      value={author.user_id}
-                      defaultValue={queryParams.author ?? undefined}
-                    >
-                      {author.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+              isMulti
+              className="w-48"
+              placeholder="Author"
+              value={authors.data
+                .filter(
+                  (author) =>
+                    queryParams.author &&
+                    queryParams.author.includes(author.user_id)
+                )
+                .map((author) => ({
+                  value: author.user_id,
+                  label: author.name,
+                }))}
+              onChange={(selectedOptions: any, actionMeta: any) =>
+                searchParamsUpdate(
+                  "author",
+                  selectedOptions.map((option: any) => option.value).join(",")
+                )
+              }
+              options={authors.data
+                .sort((a: any, b: any) => {
+                  // Ensure both a.name and b.name are strings before comparing
+                  const nameA = a.name ? a.name.toString() : "";
+                  const nameB = b.name ? b.name.toString() : "";
+                  return nameA.localeCompare(nameB);
+                })
+                .map((author) => ({
+                  value: author.user_id,
+                  label: author.name,
+                }))}
+              menuPortalTarget={document.body}
+              styles={{
+                menuPortal: (base) => ({
+                  ...base,
+                  zIndex: 9999,
+                }),
+                control: (base) => ({
+                  ...base,
+                  minHeight: "40px",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  padding: "0 8px",
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }),
+              }}
+            />
             <Select
-              onValueChange={(value) => searchParamsUpdate("year", value)}
-            >
-              <SelectTrigger className="w-32">
-                <SelectValue placeholder="Year" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(years.data)
-                  .sort((a: any, b: any) => b.year - a.year)
-                  .map((value: any, index: number) => (
-                    <SelectItem
-                      key={index}
-                      value={value.year}
-                      defaultValue={queryParams.year ?? undefined}
-                    >
-                      {value.year}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+              isMulti
+              className="w-48"
+              placeholder="Year"
+              value={Object.values(years.data)
+                .filter(
+                  (year) =>
+                    queryParams.year && queryParams.year.includes(year.year)
+                )
+                .map((year) => ({
+                  value: year.year,
+                  label: year.year,
+                }))}
+              onChange={(selectedOptions: any, actionMeta: any) =>
+                searchParamsUpdate(
+                  "year",
+                  selectedOptions.map((option: any) => option.value).join(",")
+                )
+              }
+              options={Object.values(years.data)
+                .sort((a: any, b: any) => b.year - a.year)
+                .map((year) => ({
+                  value: year.year,
+                  label: year.year,
+                }))}
+              menuPortalTarget={document.body}
+              styles={{
+                menuPortal: (base) => ({
+                  ...base,
+                  zIndex: 9999,
+                }),
+                control: (base) => ({
+                  ...base,
+                  minHeight: "40px",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  padding: "0 8px",
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }),
+              }}
+            />
           </div>
           <div className="flex w-1/3 items-center space-x-2 ml-auto">
             <Input

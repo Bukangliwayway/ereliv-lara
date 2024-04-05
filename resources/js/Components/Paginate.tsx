@@ -12,8 +12,6 @@ import { Link } from "@inertiajs/react";
 import { PageProps } from "@/types";
 
 export function Paginate({ meta, links }: any) {
-  console.log(meta);
-
   return (
     <Pagination>
       <PaginationContent>

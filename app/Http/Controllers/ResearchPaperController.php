@@ -9,6 +9,7 @@ use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 use App\Models\Author;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class ResearchPaperController extends Controller
 {
@@ -37,16 +38,31 @@ class ResearchPaperController extends Controller
             ->toArray();
 
         $query = ResearchPaper::query();
+        
         if (request('author')) {
-            $userId = request('author');
-            $query->whereHas('authors', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            });
+            $authors = request('author');
+            if (is_array($authors)) {
+                $authors = array_map('trim', $authors); // Trim whitespace from each UUID
+                $query->whereHas('authors', function ($query) use ($authors) {
+                    $query->whereIn('user_id', $authors);
+                });
+            } else {
+                $authors = explode(',', $authors); // Split the UUIDs by comma
+                $authors = array_map('trim', $authors); // Trim whitespace from each UUID
+                $query->whereHas('authors', function ($query) use ($authors) {
+                    $query->whereIn('user_id', $authors);
+                });
+            }
         }
 
         if (request('year')) {
-            $year = request('year');
-            $query->whereYear('publish_date', '=', $year);
+            $years = request('year');
+            if (is_array($years)) {
+                $query->whereIn(DB::raw('EXTRACT(YEAR FROM publish_date)'), $years);
+            } else {
+                $years = explode(',', $years);
+                $query->whereIn(DB::raw('EXTRACT(YEAR FROM publish_date)'), $years);
+            }
         }
 
         if (request('keyword')) {
@@ -77,6 +93,7 @@ class ResearchPaperController extends Controller
             'researches' => $researchesCollection,
             'authors' => $authorsCollection,
             'years' => $yearsCollection,
+            'queryParams' => request()->query()
         ]);
     }
 

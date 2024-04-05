@@ -26,28 +26,31 @@ export interface AuthorName {
 export interface Years {
     year: string;
 }
-export interface QueryParams {
-    [key: string]: string | null;
-}
+export type QueryParams = {
+    author: string[] | null;
+    keyword: string | null;
+    year: string[] | null;
+};
 
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
-    T & {
-        auth: {
-            user: User;
-        };
-        researches: {
-            data: Research[];
-            links: {};
-            meta: {};
-        };
-        meta: {};
-        authors: {
-            data: AuthorName[];
-        };
-        years: {
-            data: Years[];
-        };
-        queryParams: {
-            [key: string]: string | null;
-        };
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>
+> = T & {
+    auth: {
+        user: User;
     };
+    researches: {
+        data: Research[];
+        links: {};
+        meta: {};
+    };
+    meta: {};
+    authors: {
+        data: AuthorName[];
+    };
+    years: {
+        data: Years[];
+    };
+    queryParams: {
+        [key: string]: string | null;
+    };
+};
