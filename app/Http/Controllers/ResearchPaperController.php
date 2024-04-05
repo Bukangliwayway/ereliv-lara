@@ -18,7 +18,7 @@ class ResearchPaperController extends Controller
     public function index()
     {
 
-        $query = ResearchPaper::query();
+
 
         $distinctAuthors = Author::select('user_id')
             ->distinct('user_id')
@@ -36,6 +36,7 @@ class ResearchPaperController extends Controller
             })
             ->toArray();
 
+        $query = ResearchPaper::query();
         if (request('author')) {
             $userId = request('author');
             $query->whereHas('authors', function ($query) use ($userId) {
@@ -53,12 +54,14 @@ class ResearchPaperController extends Controller
             $columns = ['title', 'abstract', 'keywords'];
             $query->where(function ($query) use ($columns, $keyword) {
                 foreach (Arr::wrap($keyword) as $value) {
-                    $query->orWhereRaw("to_tsvector(concat_ws(' ', ?, ?, ?)) @@ to_tsquery(?)", $columns, $value);
+                    $query->orWhere(function ($query) use ($columns, $value) {
+                        foreach ($columns as $column) {
+                            $query->orWhereRaw("to_tsvector('english', $column) @@ to_tsquery('english', ?)", ["'$value'"]);
+                        }
+                    });
                 }
             });
         }
-
-
 
 
 
