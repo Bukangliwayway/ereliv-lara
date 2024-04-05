@@ -38,7 +38,7 @@ class ResearchPaperController extends Controller
             ->toArray();
 
         $query = ResearchPaper::query();
-        
+
         if (request('author')) {
             $authors = request('author');
             if (is_array($authors)) {

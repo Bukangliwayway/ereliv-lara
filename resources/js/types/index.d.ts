@@ -15,7 +15,10 @@ export interface Research {
     publication_status: string;
     research_classification: string;
     publish_date: string;
-    authors: string[];
+    authors: {
+        id: string;
+        name: string;
+    }[];
 }
 
 export interface AuthorName {

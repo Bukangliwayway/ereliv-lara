@@ -1,8 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router } from "@inertiajs/react";
+import { Head, router, Link } from "@inertiajs/react";
 import { AuthorName, PageProps, QueryParams } from "@/types";
 import { Button } from "@/shadcn/ui/button";
 import { Input } from "@/shadcn/ui/input";
+import { Badge } from "@/shadcn/ui/badge";
 import Select from "react-select";
 import {
   // Select,
@@ -48,7 +49,8 @@ export default function Page({
       <Head title="Researches" />
       <div className="flex flex-col gap-4 max-w-2xl mx-auto py-4">
         <div className="bg-white overflow-hidden  shadow-sm sm:rounded-lg p-4 flex">
-          <div className="space-x-2 flex items-center"> {/* Added 'items-center' class */}
+          <div className="space-x-2 flex items-center">
+            {/* Added 'items-center' class */}
             <Select
               isMulti
               className="w-48"
@@ -170,19 +172,38 @@ export default function Page({
             </Button>
           </div>
         </div>
-        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 flex flex-col gap-5">
+
+        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 flex flex-col gap-8">
           {researches.data.map((research: Research) => (
             <div key={research.id} className="research-item">
-              <h2>Title: {research.title}</h2>
-              <p>Abstract: {research.abstract}</p>
-              <p>Publication Status: {research.publication_status}</p>
-              <p>Research Classification: {research.research_classification}</p>
-              <p>Publish Date: {research.publish_date}</p>
-              <p>Authors:</p>
-              <ul>
-                {research.authors.map((author, index) => (
-                  <li key={index}>{author}</li>
-                ))}
+              <h2 className="text-xl font-bold mb-2">
+                <Link
+                  href={route("researches.index", { id: research.id })}
+                  className="hover:underline"
+                >
+                  {research.title}
+                </Link>
+              </h2>
+              <p className="text-gray-800 mb-2 line-clamp-3">
+                <span className="text-sm font-bold">
+                  {research.publish_date}
+                </span>{" "}
+                | {research.research_classification} |{" "}
+                {research.publication_status}
+              </p>
+              <p className="text-gray-800 mb-4 line-clamp-3">
+                {research.abstract}
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {Array.isArray(Object.values(research.authors)) &&
+                  Object.values(research.authors).map((author) => (
+                    <li
+                      key={author.id}
+                      onClick={() => searchParamsUpdate("author", author.id)}
+                    >
+                      <Badge>{author.name}</Badge>
+                    </li>
+                  ))}
               </ul>
             </div>
           ))}
