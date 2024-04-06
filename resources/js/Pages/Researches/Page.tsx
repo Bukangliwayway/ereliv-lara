@@ -66,7 +66,6 @@ export default function Page({
       .map((key) => `${key}=${encodeURIComponent(newQueryParams[key] ?? "")}`)
       .join("&");
 
-
     const url = `${route("researches.index")}?${queryString}`;
     router.get(url);
   };

@@ -7,9 +7,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/shadcn/ui/pagination";
-import { Link } from "@inertiajs/react";
-import { PageProps } from "@/types";
-
 export function Paginate({ meta, links, queryParams }: any) {
   const queryString = Object.keys(queryParams)
     .filter((key) => key !== "page")
@@ -39,13 +36,6 @@ export function Paginate({ meta, links, queryParams }: any) {
                   queryString ? "&" + queryString : ""
                 }`}
                 isActive={link.active}
-                onClick={() =>
-                  console.log(
-                    `${link.url ? link.url : ""}${
-                      queryString ? "&" + queryString : ""
-                    }`
-                  )
-                }
               >
                 {link.label === "..." ? <PaginationEllipsis /> : link.label}
               </PaginationLink>
