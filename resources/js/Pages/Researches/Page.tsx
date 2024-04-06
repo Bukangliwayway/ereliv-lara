@@ -32,8 +32,6 @@ export default function Page({
 }: PageProps) {
   queryParams = queryParams || {};
 
-  
-
   const searchParamsUpdate = (
     name: string,
     value: string | string[] | null
@@ -63,6 +61,7 @@ export default function Page({
 
     // Construct the query string
     const queryString = Object.keys(newQueryParams)
+      .filter((key) => key !== "page")
       .map((key) => `${key}=${encodeURIComponent(newQueryParams[key] ?? "")}`)
       .join("&");
 
@@ -192,6 +191,7 @@ export default function Page({
                 ) as HTMLInputElement | null;
                 searchParamsUpdate("keyword", keywordInput?.value || null);
               }}
+              
             >
               <Search size={15} />
             </Button>
