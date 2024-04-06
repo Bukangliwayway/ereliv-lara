@@ -8,23 +8,44 @@ import {
   PaginationPrevious,
 } from "@/shadcn/ui/pagination";
 import { Link } from "@inertiajs/react";
-
 import { PageProps } from "@/types";
 
-export function Paginate({ meta, links }: any) {
+export function Paginate({ meta, links, queryParams }: any) {
+  const queryString = Object.keys(queryParams)
+    .filter((key) => key !== "page")
+    .map((key) => `${key}=${encodeURIComponent(queryParams[key] ?? "")}`)
+    .join("&");
+
   return (
     <Pagination>
       <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious href={links.prev} preserveScroll />
-        </PaginationItem>
+        {links.prev && (
+          <PaginationItem>
+            <PaginationPrevious
+              href={`${links.prev ? links.prev : ""}${
+                queryString ? "&" + queryString : ""
+              }`}
+              preserveScroll
+            />
+          </PaginationItem>
+        )}
+
         {meta.links.slice(1, 11).map((link: any) =>
           link.label === "Next &raquo;" ? null : (
             <PaginationItem>
               <PaginationLink
                 preserveScroll
-                href={link.url}
+                href={`${link.url ? link.url : ""}${
+                  queryString ? "&" + queryString : ""
+                }`}
                 isActive={link.active}
+                onClick={() =>
+                  console.log(
+                    `${link.url ? link.url : ""}${
+                      queryString ? "&" + queryString : ""
+                    }`
+                  )
+                }
               >
                 {link.label === "..." ? <PaginationEllipsis /> : link.label}
               </PaginationLink>
@@ -33,20 +54,34 @@ export function Paginate({ meta, links }: any) {
         )}
 
         {meta.links.length > 12 && (
-          <PaginationItem>
-            <PaginationLink
-              preserveScroll
-              href={meta.links[meta.links.length - 2].url}
-              isActive={meta.links[meta.links.length - 2].active}
-            >
-              {meta.links[meta.links.length - 2].label}
-            </PaginationLink>
-          </PaginationItem>
+          <>
+            <PaginationItem>
+              <PaginationLink preserveScroll href={"#"}>
+                <PaginationEllipsis />
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                preserveScroll
+                href={`${meta.links[meta.links.length - 2].url}&${queryString}`}
+                isActive={meta.links[meta.links.length - 2].active}
+              >
+                {meta.links[meta.links.length - 2].label}
+              </PaginationLink>
+            </PaginationItem>
+          </>
         )}
 
-        <PaginationItem>
-          <PaginationNext href={links.next} preserveScroll />
-        </PaginationItem>
+        {links.next && (
+          <PaginationItem>
+            <PaginationNext
+              href={`${links.next ? links.next : ""}${
+                queryString ? "&" + queryString : ""
+              }`}
+              preserveScroll
+            />
+          </PaginationItem>
+        )}
       </PaginationContent>
     </Pagination>
   );

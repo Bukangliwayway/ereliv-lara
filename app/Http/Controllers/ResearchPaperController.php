@@ -19,8 +19,6 @@ class ResearchPaperController extends Controller
     public function index()
     {
 
-
-
         $distinctAuthors = Author::select('user_id')
             ->distinct('user_id')
             ->get();

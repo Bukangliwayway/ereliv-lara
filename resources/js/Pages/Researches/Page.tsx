@@ -32,16 +32,43 @@ export default function Page({
 }: PageProps) {
   queryParams = queryParams || {};
 
+  
+
   const searchParamsUpdate = (
     name: string,
     value: string | string[] | null
   ) => {
+    const newQueryParams = { ...queryParams }; // Create a new object to avoid mutating the original queryParams
+
     if (name === "author" || name === "year") {
-      queryParams[name] = Array.isArray(value) ? value.join(",") : value;
+      newQueryParams[name] = Array.isArray(value)
+        ? value.join(",")
+        : value?.toString() ?? null;
     } else {
-      queryParams[name] = value as string | null;
+      newQueryParams[name] = value?.toString() ?? null;
     }
-    router.get(route("researches.index"), queryParams);
+
+    // Remove the property from newQueryParams if the value is null
+    if (newQueryParams[name] === null) {
+      delete newQueryParams[name];
+    }
+
+    if (newQueryParams.author === "") {
+      delete newQueryParams.author;
+    }
+
+    if (newQueryParams.year === "") {
+      delete newQueryParams.year;
+    }
+
+    // Construct the query string
+    const queryString = Object.keys(newQueryParams)
+      .map((key) => `${key}=${encodeURIComponent(newQueryParams[key] ?? "")}`)
+      .join("&");
+
+
+    const url = `${route("researches.index")}?${queryString}`;
+    router.get(url);
   };
 
   return (
@@ -50,7 +77,6 @@ export default function Page({
       <div className="flex flex-col gap-4 max-w-2xl mx-auto py-4">
         <div className="bg-white overflow-hidden  shadow-sm sm:rounded-lg p-4 flex">
           <div className="space-x-2 flex items-center">
-            {/* Added 'items-center' class */}
             <Select
               isMulti
               className="w-48"
@@ -187,7 +213,7 @@ export default function Page({
               <p className="text-gray-800 mb-2 line-clamp-3">
                 <span className="text-sm font-bold">
                   {research.publish_date}
-                </span>{" "}
+                </span>
                 | {research.research_classification} |{" "}
                 {research.publication_status}
               </p>
@@ -198,6 +224,7 @@ export default function Page({
                 {Array.isArray(Object.values(research.authors)) &&
                   Object.values(research.authors).map((author) => (
                     <li
+                      className="cursor-pointer"
                       key={author.id}
                       onClick={() => searchParamsUpdate("author", author.id)}
                     >
@@ -209,7 +236,11 @@ export default function Page({
           ))}
         </div>
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 flex">
-          <Paginate meta={researches?.meta} links={researches?.links} />
+          <Paginate
+            meta={researches?.meta}
+            links={researches?.links}
+            queryParams={queryParams}
+          />
         </div>
       </div>
     </AuthenticatedLayout>
