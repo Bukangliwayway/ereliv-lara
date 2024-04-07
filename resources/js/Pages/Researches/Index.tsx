@@ -23,7 +23,7 @@ const initialQueryParams: QueryParams = {
   year: null,
 };
 
-export default function Page({
+export default function Index({
   auth,
   researches,
   authors,
@@ -191,7 +191,6 @@ export default function Page({
                 ) as HTMLInputElement | null;
                 searchParamsUpdate("keyword", keywordInput?.value || null);
               }}
-              
             >
               <Search size={15} />
             </Button>
@@ -203,7 +202,7 @@ export default function Page({
             <div key={research.id} className="research-item">
               <h2 className="text-xl font-bold mb-2">
                 <Link
-                  href={route("researches.index", { id: research.id })}
+                  href={route("researches.show", research.id)}
                   className="hover:underline"
                 >
                   {research.title}

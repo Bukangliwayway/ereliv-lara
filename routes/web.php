@@ -30,7 +30,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    // Route::get('/researches', [ResearchPaperController::class, 'index'])->name('researches.index');
 
     // Reader routes
     Route::middleware('CheckRole:reader')->group(function () {
@@ -39,7 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Researcher routes
     Route::middleware('CheckRole:researcher')->group(function () {
-        Route::resource('researches', ResearchPaperController::class)->except(['index']);
+        // Route::resource('researches', ResearchPaperController::class)->except(['index']);
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
+
+
     });
 
     // Admin routes
@@ -48,7 +51,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('CheckRole:researcher|reader')->group(function () {
-        Route::resource('researches', ResearchPaperController::class)->only(['index']);
+
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+
+
+        // Route::resource('researches', ResearchPaperController::class)->only(['index', 'show']);
     });
 
 

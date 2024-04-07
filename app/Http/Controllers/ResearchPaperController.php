@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreResearchPaperRequest;
 use App\Http\Requests\UpdateResearchPaperRequest;
 use App\Http\Resources\AuthorNamesResource;
+use App\Http\Resources\PaperOverviewResource;
 use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 use App\Models\Author;
@@ -77,17 +78,15 @@ class ResearchPaperController extends Controller
             });
         }
 
-
-
         $researches = $query->paginate(5);
-        $researchesCollection = ResearchPaperResource::collection($researches);
+        $researchesCollection = PaperOverviewResource::collection($researches);
         $yearsCollection = ['data' => $distinctYears];
         $authorsCollection = AuthorNamesResource::collection($distinctAuthors);
 
         // dd($yearsCollection, $authorsCollection->response()->getData(true));
-        // dd(ResearchPaperResource::collection($researches)->response()->getData(true));
+        // dd(PaperOverviewResource::collection($researches)->response()->getData(true));
 
-        return inertia("Researches/Page", [
+        return inertia("Researches/Index", [
             'researches' => $researchesCollection,
             'authors' => $authorsCollection,
             'years' => $yearsCollection,
@@ -116,7 +115,13 @@ class ResearchPaperController extends Controller
      */
     public function show(ResearchPaper $researchPaper)
     {
-        //
+
+
+        // $result = new ResearchPaperResource($researchPaper);
+        // dd($result->response()->getData(true));
+        return inertia("Researches/Show", [
+            'research' => new ResearchPaperResource($researchPaper),
+        ]);
     }
 
     /**
