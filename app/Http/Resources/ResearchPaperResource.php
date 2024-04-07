@@ -28,6 +28,7 @@ class ResearchPaperResource extends JsonResource
             'publication_status' => $this->publication_status,
             'research_classification' => $this->research_classification,
             'publish_date' => (new Carbon($this->publish_date))->format('m-d-Y'),
+            'editable' => $this->editable(),
             'authors' => $this->authorNames(),
         ];
     }

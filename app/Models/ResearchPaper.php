@@ -33,6 +33,16 @@ class ResearchPaper extends Model
                 return (object) ['name' => $name, 'id' => $id];
             });
     }
+
+    public function editable()
+    {
+        $authenticatedUserId = auth()->id();
+
+        return $this->belongsToMany(User::class, 'authors', 'research_paper_id', 'user_id')
+            ->using(AuthorPivot::class)
+            ->wherePivot('user_id', $authenticatedUserId)
+            ->exists();
+    }
 }
 
 

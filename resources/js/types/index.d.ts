@@ -29,10 +29,11 @@ export interface FullResearch {
     methodology: string;
     result: string;
     discussion: string;
-    conslusion: string;
+    conclusion: string;
     keywords: string;
     publication_status: string;
     research_classification: string;
+    editable: boolean;
     publish_date: string;
     authors: {
         id: string;

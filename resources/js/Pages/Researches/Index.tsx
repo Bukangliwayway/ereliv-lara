@@ -5,23 +5,9 @@ import { Button } from "@/shadcn/ui/button";
 import { Input } from "@/shadcn/ui/input";
 import { Badge } from "@/shadcn/ui/badge";
 import Select from "react-select";
-import {
-  // Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shadcn/ui/select";
-import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { Research } from "@/types";
 import { Paginate } from "@/Components/Paginate";
-
-const initialQueryParams: QueryParams = {
-  author: null,
-  keyword: null,
-  year: null,
-};
 
 export default function Index({
   auth,
