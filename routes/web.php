@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('CheckRole:researcher')->group(function () {
         // Route::resource('researches', ResearchPaperController::class)->except(['index']);
         Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+        Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
+        Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
+        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
         Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
 
 
@@ -58,8 +61,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Route::resource('researches', ResearchPaperController::class)->only(['index', 'show']);
     });
-
-
 });
 
 Route::middleware('auth')->group(function () {

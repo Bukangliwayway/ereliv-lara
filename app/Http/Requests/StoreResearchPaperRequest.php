@@ -22,7 +22,18 @@ class StoreResearchPaperRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string',
+            'introduction' => 'required|string',
+            'methodology' => 'required|string',
+            'result' => 'required|string',
+            'abstract' => 'required|string',
+            'discussion' => 'required|string',
+            'conclusion' => 'required|string',
+            'keywords' => 'required|string',
+            'publication_status' => 'required|in:Ongoing,Completed,Published,Presented',
+            'research_classification' => 'required|in:Institutional Research,Self-Funded Research,Externally Funded Research',
+            'publish_date' => 'required|date',
+            'modifier_id' => 'required|exists:users,id',
         ];
     }
 }

@@ -13,29 +13,25 @@ import {
 } from "@/shadcn/ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
 
-export default function Page({ auth, research }: PageProps) {
+export default function Show({ auth, research }: PageProps) {
   console.log(research);
+
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      // header={
-      //   <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-      //     {research.data.title || "nani"}
-      //   </h2>
-      // }
-    >
+    <AuthenticatedLayout user={auth.user}>
       <Head title="Research" />
       <div className="max-w-2xl mx-auto py-4">
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 relative">
           <div className="space-x-2 flex flex-col items-center">
             <div className="flex gap-4 absolute top-2 right-5">
-              {!research.data.editable && (
+              {research.data.editable && (
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Ellipsis />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <Link href={route("researches.edit", research.data.id)}>
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem>Delete</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -52,8 +48,8 @@ export default function Page({ auth, research }: PageProps) {
                     .join(", ")}
               </p>
               <div className="flex gap-2 justify-end">
-                <Badge>{research.data.publication_status}</Badge>
                 <Badge>{research.data.research_classification}</Badge>
+                <Badge>{research.data.publication_status}</Badge>
                 <Badge>{research.data.publish_date}</Badge>
               </div>
             </div>

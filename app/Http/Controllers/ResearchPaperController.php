@@ -94,12 +94,24 @@ class ResearchPaperController extends Controller
         ]);
     }
 
+
+    public function works()
+    {
+        $researches = ResearchPaper::whereHas('authors', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
+
+        return inertia("Researches/Works", [
+            'researches' => PaperOverviewResource::collection($researches)
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return inertia("Researches/Create");
     }
 
     /**
@@ -116,7 +128,6 @@ class ResearchPaperController extends Controller
     public function show(ResearchPaper $researchPaper)
     {
 
-
         // $result = new ResearchPaperResource($researchPaper);
         // dd($result->response()->getData(true));
         return inertia("Researches/Show", [
@@ -125,11 +136,15 @@ class ResearchPaperController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource.w
      */
-    public function edit(ResearchPaper $researchPaper)
+    public function edit(string $id)
     {
-        //
+        $data = ResearchPaper::findOrFail($id);
+        $researchPaper = new ResearchPaperResource($data);
+        return inertia("Researches/Edit", [
+            'research' => new ResearchPaperResource($researchPaper),
+        ]);
     }
 
     /**

@@ -45,12 +45,12 @@ export default function Authenticated({
                   </NavLink>
                   {user.role == "researcher" && (
                     <>
-                      {/* <NavLink
+                      <NavLink
                         href={route("researches.works")}
                         active={route().current("researches.works")}
                       >
                         Works
-                      </NavLink> */}
+                      </NavLink>
                       {/* <NavLink
                         href={route("dashboard")}
                         active={route().current("dashboard")}
