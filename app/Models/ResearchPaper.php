@@ -14,6 +14,20 @@ class ResearchPaper extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        'title',
+        'introduction',
+        'methodology',
+        'result',
+        'abstract',
+        'discussion',
+        'conclusion',
+        'keywords',
+        'publication_status',
+        'research_classification',
+        'publish_date',
+    ];
+
 
     public function authors()
     {

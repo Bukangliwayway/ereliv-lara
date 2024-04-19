@@ -119,7 +119,7 @@ class ResearchPaperController extends Controller
      */
     public function store(StoreResearchPaperRequest $request)
     {
-        //
+        dd($request);
     }
 
     /**

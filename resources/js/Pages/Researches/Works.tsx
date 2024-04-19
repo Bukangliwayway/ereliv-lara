@@ -5,7 +5,7 @@ import { Button } from "@/shadcn/ui/button";
 import { Input } from "@/shadcn/ui/input";
 import { Badge } from "@/shadcn/ui/badge";
 import Select from "react-select";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { Research } from "@/types";
 import { Paginate } from "@/Components/Paginate";
 
@@ -14,10 +14,11 @@ export default function Works({ auth, researches }: PageProps) {
     <AuthenticatedLayout user={auth.user}>
       <Head title="Researches" />
       <div className="flex flex-col gap-4 max-w-2xl mx-auto py-4">
-        <div className="bg-white overflow-hidden  shadow-sm sm:rounded-lg p-4 flex">
-          <Link href={route("researches.create")}>
-            <Button>
-              <Search size={15} />
+        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 flex">
+          <Link href={route("researches.create")} className="w-full">
+            <Button className="w-full flex gap-3">
+              <Plus size={15} />
+              <span>Publish New Research Paper</span>
             </Button>
           </Link>
         </div>
