@@ -8,6 +8,11 @@ export interface User {
     email_verified_at: string;
 }
 
+export interface AuthorSelection {
+    id: string;
+    name: string;
+}
+
 export interface Research {
     id: UUID;
     title: string;
@@ -55,27 +60,29 @@ export type QueryParams = {
     year: string[] | null;
 };
 
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
-    T & {
-        auth: {
-            user: User;
-        };
-        researches: {
-            data: Research[];
-            links: {};
-            meta: {};
-        };
-        meta: {};
-        authors: {
-            data: AuthorName[];
-        };
-        years: {
-            data: Years[];
-        };
-        queryParams: {
-            [key: string]: string | null;
-        };
-        research: {
-            data: FullResearch;
-        };
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>
+> = T & {
+    auth: {
+        user: User;
     };
+    researches: {
+        data: Research[];
+        links: {};
+        meta: {};
+    };
+    meta: {};
+    authors: {
+        data: AuthorName[];
+    };
+    years: {
+        data: Years[];
+    };
+    queryParams: {
+        [key: string]: string | null;
+    };
+    research: {
+        data: FullResearch;
+    };
+    authorsSelection: AuthorSelection[];
+};

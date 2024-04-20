@@ -6,10 +6,9 @@ import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import TextAreaInput from "@/Components/TextAreaInput";
 import SelectInput from "@/Components/SelectInput";
-import { CheckboxInput } from "@/Components/CheckboxInput";
-import { useState } from "react";
+import MultiSelectDropdown from "@/Components/MultiselectDropdown";
 
-export default function Create({ auth }: PageProps) {
+export default function Create({ auth, authorsSelection }: PageProps) {
   const { data, setData, post, errors, reset } = useForm({
     title: "",
     introduction: "",
@@ -24,9 +23,10 @@ export default function Create({ auth }: PageProps) {
     publish_date: "",
   });
 
+  console.log(authorsSelection);
+
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     post(route("researches.store"));
   };
 
@@ -62,33 +62,12 @@ export default function Create({ auth }: PageProps) {
             <div className="mt-10">
               <InputLabel htmlFor="authors" value="Authors" />
               <div className="flex flex-wrap gap-2">
-                <CheckboxInput
+                <MultiSelectDropdown
                   name="authors"
-                  id="author1"
-                  value="author1"
+                  options={authorsSelection}
                   data={data}
                   setData={setData}
-                  className="mt-1"
                 />
-                <label htmlFor="author1">Author 1</label>
-                <CheckboxInput
-                  name="authors"
-                  id="author2"
-                  value="author2"
-                  data={data}
-                  setData={setData}
-                  className="mt-1"
-                />
-                <label htmlFor="author2">Author 2</label>
-                <CheckboxInput
-                  name="authors"
-                  id="author3"
-                  value="author3"
-                  data={data}
-                  setData={setData}
-                  className="mt-1"
-                />
-                <label htmlFor="author3">Author 3</label>
               </div>
             </div>
 
@@ -105,30 +84,6 @@ export default function Create({ auth }: PageProps) {
               />
 
               <InputError message={errors.publish_date} className="mt-2" />
-            </div>
-
-            <div className="mt-10">
-              <InputLabel
-                htmlFor="research_classification"
-                value="Research Classification"
-              />
-              <SelectInput
-                name="research_classification"
-                id="research_classification"
-                className="mt-1 block w-full p-2"
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setData("research_classification", e.target.value)
-                }
-              >
-                <option value="">Select Status</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </SelectInput>
-              <InputError
-                message={errors.research_classification}
-                className="mt-2"
-              />
             </div>
 
             <div className="mt-10">
@@ -216,9 +171,10 @@ export default function Create({ auth }: PageProps) {
                 }
               >
                 <option value="">Select Status</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Published">Published</option>
+                <option value="Presented">Presented</option>
               </SelectInput>
 
               <InputError
@@ -241,10 +197,16 @@ export default function Create({ auth }: PageProps) {
                   setData("research_classification", e.target.value)
                 }
               >
-                <option value="">Select Status</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
+                <option value="">Select Classification</option>
+                <option value="Institutional Research">
+                  Institutional Research
+                </option>
+                <option value="Self-Funded Research">
+                  Self-Funded Research
+                </option>
+                <option value="Externally Funded Research">
+                  Externally Funded Research
+                </option>
               </SelectInput>
 
               <InputError

@@ -9,6 +9,7 @@ use App\Http\Resources\PaperOverviewResource;
 use App\Http\Resources\ResearchPaperResource;
 use App\Models\ResearchPaper;
 use App\Models\Author;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -111,7 +112,20 @@ class ResearchPaperController extends Controller
      */
     public function create()
     {
-        return inertia("Researches/Create");
+
+        $authorsCollection = User::select('id', 'name')
+            ->where('role', 'researcher')
+            ->get()
+            ->map(function ($author) {
+                return [
+                    'id' => $author->id,
+                    'name' => $author->name,
+                ];
+            });
+
+        return inertia("Researches/Create", [
+            'authorsSelection' => $authorsCollection,
+        ]);
     }
 
     /**
