@@ -45,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
         Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
         Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
+        Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
+
+
     });
 
     // Admin routes

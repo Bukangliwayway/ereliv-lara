@@ -26,6 +26,7 @@ class ResearchPaper extends Model
         'publication_status',
         'research_classification',
         'publish_date',
+        'modifier_id'
     ];
 
 

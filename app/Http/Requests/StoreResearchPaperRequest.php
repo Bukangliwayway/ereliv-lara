@@ -32,8 +32,9 @@ class StoreResearchPaperRequest extends FormRequest
             'keywords' => 'required|string',
             'publication_status' => 'required|in:Ongoing,Completed,Published,Presented',
             'research_classification' => 'required|in:Institutional Research,Self-Funded Research,Externally Funded Research',
-            'publish_date' => 'required|date',
+            'publish_date' => 'required|date|after_or_equal:1900-01-01|before_or_equal:today',
             'modifier_id' => 'required|exists:users,id',
+            'authors' => 'required|array|min:1',
         ];
     }
 }

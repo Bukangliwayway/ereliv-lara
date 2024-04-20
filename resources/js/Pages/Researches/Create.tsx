@@ -7,26 +7,40 @@ import InputError from "@/Components/InputError";
 import TextAreaInput from "@/Components/TextAreaInput";
 import SelectInput from "@/Components/SelectInput";
 import MultiSelectDropdown from "@/Components/MultiselectDropdown";
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
-export default function Create({ auth, authorsSelection }: PageProps) {
+export default function Create({
+  auth,
+  authorsSelection,
+  research,
+}: PageProps) {
   const { data, setData, post, errors, reset } = useForm({
-    title: "",
-    introduction: "",
-    methodology: "",
-    result: "",
-    abstract: "",
-    discussion: "",
-    conclusion: "",
-    keywords: "",
-    publication_status: "",
-    research_classification: "",
-    publish_date: "",
+    id: research ? research?.data?.id : "",
+    title: research ? research?.data?.title : "",
+    introduction: research ? research?.data?.introduction : "",
+    methodology: research ? research?.data?.methodology : "",
+    result: research ? research?.data?.result : "",
+    abstract: research ? research?.data?.abstract : "",
+    discussion: research ? research?.data?.discussion : "",
+    conclusion: research ? research?.data?.conclusion : "",
+    keywords: research ? research?.data?.keywords : "",
+    publication_status: research ? research?.data?.publication_status : "", // Add a fallback value here
+    research_classification: research
+      ? research?.data?.research_classification
+      : "", // Add a fallback value here
+    publish_date: research
+      ? format(new Date(research?.data?.publish_date), "yyyy-MM-dd")
+      : "",
+    modifier_id: auth.user.id,
+    authors: research
+      ? Object.values(research?.data?.authors).map((author: any) => author.id)
+      : [auth.user.id],
   });
-
-  console.log(authorsSelection);
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
     post(route("researches.store"));
   };
 
@@ -157,6 +171,21 @@ export default function Create({ auth, authorsSelection }: PageProps) {
             </div>
 
             <div className="mt-10">
+              <InputLabel htmlFor="conclusion" value="Conclusion" />
+              <TextAreaInput
+                id="conclusion"
+                name="conclusion"
+                value={data.conclusion}
+                className="mt-1 block w-full"
+                onChange={(e: { target: { value: string } }) =>
+                  setData("conclusion", e.target.value)
+                }
+              />
+
+              <InputError message={errors.conclusion} className="mt-2" />
+            </div>
+
+            <div className="mt-10">
               <InputLabel
                 htmlFor="publication_status"
                 value="Publication Status"
@@ -169,6 +198,7 @@ export default function Create({ auth, authorsSelection }: PageProps) {
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setData("publication_status", e.target.value)
                 }
+                value={data.publication_status || ""} // Add the value prop here
               >
                 <option value="">Select Status</option>
                 <option value="Ongoing">Ongoing</option>
@@ -196,6 +226,7 @@ export default function Create({ auth, authorsSelection }: PageProps) {
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setData("research_classification", e.target.value)
                 }
+                value={data.research_classification || ""} // Add the value prop here
               >
                 <option value="">Select Classification</option>
                 <option value="Institutional Research">

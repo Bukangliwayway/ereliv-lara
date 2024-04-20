@@ -133,8 +133,28 @@ class ResearchPaperController extends Controller
      */
     public function store(StoreResearchPaperRequest $request)
     {
-        dd($request);
+        $data = $request->validated();
+        $researchPaper = ResearchPaper::create([
+            'title' => $data['title'],
+            'introduction' => $data['introduction'],
+            'methodology' => $data['methodology'],
+            'result' => $data['result'],
+            'abstract' => $data['abstract'],
+            'discussion' => $data['discussion'],
+            'conclusion' => $data['conclusion'],
+            'keywords' => $data['keywords'],
+            'publication_status' => $data['publication_status'],
+            'research_classification' => $data['research_classification'],
+            'publish_date' => $data['publish_date'],
+            'modifier_id' => $data['modifier_id'],
+        ]);
+
+        $authorIds = $data['authors'];
+        $researchPaper->authors()->attach($authorIds);
+
+        return redirect()->route('researches.show', $researchPaper->id);
     }
+
 
     /**
      * Display the specified resource.
@@ -154,9 +174,20 @@ class ResearchPaperController extends Controller
      */
     public function edit(string $id)
     {
+        $authorsCollection = User::select('id', 'name')
+            ->where('role', 'researcher')
+            ->get()
+            ->map(function ($author) {
+                return [
+                    'id' => $author->id,
+                    'name' => $author->name,
+                ];
+            });
+
         $data = ResearchPaper::findOrFail($id);
         $researchPaper = new ResearchPaperResource($data);
-        return inertia("Researches/Edit", [
+        return inertia("Researches/Create", [
+            'authorsSelection' => $authorsCollection,
             'research' => new ResearchPaperResource($researchPaper),
         ]);
     }
@@ -166,7 +197,40 @@ class ResearchPaperController extends Controller
      */
     public function update(UpdateResearchPaperRequest $request, ResearchPaper $researchPaper)
     {
-        //
+        $data = $request->validated();
+
+        // Update the research paper
+        $researchPaper->update([
+            'title' => $data['title'],
+            'introduction' => $data['introduction'],
+            'methodology' => $data['methodology'],
+            'result' => $data['result'],
+            'abstract' => $data['abstract'],
+            'discussion' => $data['discussion'],
+            'conclusion' => $data['conclusion'],
+            'keywords' => $data['keywords'],
+            'publication_status' => $data['publication_status'],
+            'research_classification' => $data['research_classification'],
+            'publish_date' => $data['publish_date'],
+            'modifier_id' => $data['modifier_id'],
+        ]);
+
+        // Detach all existing authors
+        $researchPaper->authors()->detach();
+
+        // Attach new authors
+        $authorIds = $data['authors'];
+        $researchPaper->authors()->detach();
+
+        // Delete the authors first to ensure that the pivot table is updated
+        $oldAuthors = $researchPaper->authors;
+        foreach ($oldAuthors as $author) {
+            $author->delete();
+        }
+
+        $researchPaper->authors()->attach($authorIds);
+
+        return redirect()->route('researches.show', $researchPaper->id);
     }
 
     /**
