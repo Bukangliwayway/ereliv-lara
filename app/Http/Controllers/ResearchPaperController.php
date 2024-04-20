@@ -123,7 +123,7 @@ class ResearchPaperController extends Controller
                 ];
             });
 
-        return inertia("Researches/Create", [
+        return inertia("Researches/Publish", [
             'authorsSelection' => $authorsCollection,
         ]);
     }
@@ -186,7 +186,7 @@ class ResearchPaperController extends Controller
 
         $data = ResearchPaper::findOrFail($id);
         $researchPaper = new ResearchPaperResource($data);
-        return inertia("Researches/Create", [
+        return inertia("Researches/Publish", [
             'authorsSelection' => $authorsCollection,
             'research' => new ResearchPaperResource($researchPaper),
         ]);

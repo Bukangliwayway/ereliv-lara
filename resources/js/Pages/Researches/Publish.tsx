@@ -10,7 +10,7 @@ import MultiSelectDropdown from "@/Components/MultiselectDropdown";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-export default function Create({
+export default function Publish({
   auth,
   authorsSelection,
   research,
