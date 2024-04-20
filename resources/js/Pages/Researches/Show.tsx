@@ -2,7 +2,6 @@ import { Head, router, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PageProps } from "@/types";
 import { Badge } from "@/shadcn/ui/badge";
-import { Button } from "@/shadcn/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,11 +10,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shadcn/ui/alert-dialog";
 import { Ellipsis } from "lucide-react";
 
 export default function Show({ auth, research }: PageProps) {
-  console.log(research);
-
   return (
     <AuthenticatedLayout user={auth.user}>
       <Head title="Research" />
@@ -30,9 +38,44 @@ export default function Show({ auth, research }: PageProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <Link href={route("researches.edit", research.data.id)}>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <div className="w-full text-center">Edit</div>
+                      </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <AlertDialog>
+                      <DropdownMenuItem>
+                        <AlertDialogTrigger
+                          className="w-full"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Delete
+                        </AlertDialogTrigger>
+                      </DropdownMenuItem>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your research paper from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                          <AlertDialogAction
+                            onClick={() => {
+                              router.delete(
+                                route("researches.destroy", research.data.id)
+                              );
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

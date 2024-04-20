@@ -15,7 +15,7 @@ export default function Publish({
   authorsSelection,
   research,
 }: PageProps) {
-  const { data, setData, post, errors, reset } = useForm({
+  const { data, setData, post, put, errors, reset } = useForm({
     id: research ? research?.data?.id : "",
     title: research ? research?.data?.title : "",
     introduction: research ? research?.data?.introduction : "",
@@ -38,11 +38,16 @@ export default function Publish({
       : [auth.user.id],
   });
 
+
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    post(route("researches.store"));
+    Object.keys(research?.data)?.length > 0
+      ? put(route("researches.update", research?.data?.id))
+      : post(route("researches.store"));
   };
+
+  console.log(errors);
 
   return (
     <AuthenticatedLayout
@@ -58,6 +63,7 @@ export default function Publish({
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 relative">
           <form
             onSubmit={onSubmit}
+            method="PUT"
             className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
           >
             <div>

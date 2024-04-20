@@ -199,6 +199,8 @@ class ResearchPaperController extends Controller
     {
         $data = $request->validated();
 
+        $researchPaper = ResearchPaper::findOrFail($data['id']);
+
         // Update the research paper
         $researchPaper->update([
             'title' => $data['title'],
@@ -218,26 +220,38 @@ class ResearchPaperController extends Controller
         // Detach all existing authors
         $researchPaper->authors()->detach();
 
+        Author::where('research_paper_id', $researchPaper->id)->delete();
+
+
         // Attach new authors
         $authorIds = $data['authors'];
-        $researchPaper->authors()->detach();
 
-        // Delete the authors first to ensure that the pivot table is updated
-        $oldAuthors = $researchPaper->authors;
-        foreach ($oldAuthors as $author) {
-            $author->delete();
+        foreach ($authorIds as $authorId) {
+            Author::create([
+                'user_id' => $authorId,
+                'research_paper_id' => $data['id'],
+            ]);
         }
 
-        $researchPaper->authors()->attach($authorIds);
-
-        return redirect()->route('researches.show', $researchPaper->id);
+        return redirect()->route('researches.show', $data['id']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ResearchPaper $researchPaper)
+    public function destroy(string $id)
     {
-        //
+        $researchPaper = ResearchPaper::findOrFail($id);
+
+        $researchPaper->authors()->detach();
+
+        // Delete the authors row associated with the research paper
+        Author::where('research_paper_id', $researchPaper->id)->delete();
+
+
+        // Delete the research paper
+        $researchPaper->delete();
+
+        return redirect()->route('researches.works');
     }
 }

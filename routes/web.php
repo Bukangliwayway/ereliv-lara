@@ -46,6 +46,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
         Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
         Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
+        Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
+
 
 
     });

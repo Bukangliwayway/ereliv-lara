@@ -11,7 +11,7 @@ class UpdateResearchPaperRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,20 @@ class UpdateResearchPaperRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id' => 'string',
+            'title' => 'required|string',
+            'introduction' => 'required|string',
+            'methodology' => 'required|string',
+            'result' => 'required|string',
+            'abstract' => 'required|string',
+            'discussion' => 'required|string',
+            'conclusion' => 'required|string',
+            'keywords' => 'required|string',
+            'publication_status' => 'required|in:Ongoing,Completed,Published,Presented',
+            'research_classification' => 'required|in:Institutional Research,Self-Funded Research,Externally Funded Research',
+            'publish_date' => 'required|date|after_or_equal:1900-01-01|before_or_equal:today',
+            'modifier_id' => 'required|exists:users,id',
+            'authors' => 'required|array|min:1',
         ];
     }
 }
