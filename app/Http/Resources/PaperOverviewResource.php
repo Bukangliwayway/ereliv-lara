@@ -22,7 +22,7 @@ class PaperOverviewResource extends JsonResource
             'publication_status' => $this->publication_status,
             'research_classification' => $this->research_classification,
             'publish_date' => (new Carbon($this->publish_date))->format('m-d-Y'),
-            'authors' => $this->authorNames(),
+        'authors' => method_exists($this, 'authorNames') ? $this->authorNames() : $this->authors,
         ];
     }
 }

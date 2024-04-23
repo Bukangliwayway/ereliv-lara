@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\AuthorPivot;
+use App\Models\ResearchPaper;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -28,8 +31,21 @@ class ResearchPaperResource extends JsonResource
             'publication_status' => $this->publication_status,
             'research_classification' => $this->research_classification,
             'publish_date' => (new Carbon($this->publish_date))->format('m-d-Y'),
-            'editable' => $this->editable(),
-            'authors' => $this->authorNames(),
+            'editable' => function () {
+                $authenticatedUserId = auth()->id(); // or any method you use to get the authenticated user's ID
+    
+                $user = User::find($authenticatedUserId);
+
+                if (!$user) {
+                    return false;
+                }
+
+                return $user->belongsToMany(ResearchPaper::class, 'authors', 'user_id', 'research_paper_id')
+                    ->using(AuthorPivot::class)
+                    ->wherePivot('research_paper_id', $this->resource->id)
+                    ->exists();
+            },
+            'authors' => method_exists($this, 'authorNames') ? $this->authorNames() : $this->authors,
         ];
     }
 }
