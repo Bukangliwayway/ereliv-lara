@@ -55,7 +55,6 @@ export default function Index({
     router.get(url);
   };
 
-  console.log(researches);
 
   return (
     <AuthenticatedLayout user={auth.user}>

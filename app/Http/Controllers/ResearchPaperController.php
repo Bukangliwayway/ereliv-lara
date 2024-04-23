@@ -26,85 +26,6 @@ class ResearchPaperController extends Controller
         $this->elasticsearch = ClientBuilder::create()->setHosts($hosts)->build();
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-
-    //     $distinctAuthors = Author::select('user_id')
-    //         ->distinct('user_id')
-    //         ->get();
-
-    //     $distinctYears = ResearchPaper::selectRaw("DISTINCT EXTRACT(YEAR FROM publish_date) AS year")
-    //         ->get()
-    //         ->pluck('year')
-    //         ->map(function ($year) {
-    //             return (int) $year; // Cast to integer
-    //         })
-    //         ->sortDesc() // Sort in descending order
-    //         ->map(function ($year) {
-    //             return ['year' => $year];
-    //         })
-    //         ->toArray();
-
-    //     $query = ResearchPaper::query();
-
-    //     if (request('author')) {
-    //         $authors = request('author');
-    //         if (is_array($authors)) {
-    //             $authors = array_map('trim', $authors); // Trim whitespace from each UUID
-    //             $query->whereHas('authors', function ($query) use ($authors) {
-    //                 $query->whereIn('user_id', $authors);
-    //             });
-    //         } else {
-    //             $authors = explode(',', $authors); // Split the UUIDs by comma
-    //             $authors = array_map('trim', $authors); // Trim whitespace from each UUID
-    //             $query->whereHas('authors', function ($query) use ($authors) {
-    //                 $query->whereIn('user_id', $authors);
-    //             });
-    //         }
-    //     }
-
-    //     if (request('year')) {
-    //         $years = request('year');
-    //         if (is_array($years)) {
-    //             $query->whereIn(DB::raw('EXTRACT(YEAR FROM publish_date)'), $years);
-    //         } else {
-    //             $years = explode(',', $years);
-    //             $query->whereIn(DB::raw('EXTRACT(YEAR FROM publish_date)'), $years);
-    //         }
-    //     }
-
-    //     if (request('keyword')) {
-    //         $keyword = request('keyword');
-    //         $columns = ['title', 'abstract', 'keywords'];
-    //         $query->where(function ($query) use ($columns, $keyword) {
-    //             foreach (Arr::wrap($keyword) as $value) {
-    //                 $query->orWhere(function ($query) use ($columns, $value) {
-    //                     foreach ($columns as $column) {
-    //                         $query->orWhereRaw("to_tsvector('english', $column) @@ to_tsquery('english', ?)", ["'$value'"]);
-    //                     }
-    //                 });
-    //             }
-    //         });
-    //     }
-
-    //     $researches = $query->paginate(5);
-    //     $researchesCollection = PaperOverviewResource::collection($researches);
-    //     $yearsCollection = ['data' => $distinctYears];
-    //     $authorsCollection = AuthorNamesResource::collection($distinctAuthors);
-
-    //     // dd($yearsCollection, $authorsCollection->response()->getData(true));
-    //     // dd(PaperOverviewResource::collection($researches)->response()->getData(true));
-
-    //     return inertia("Researches/Index", [
-    //         'researches' => $researchesCollection,
-    //         'authors' => $authorsCollection,
-    //         'years' => $yearsCollection,
-    //         'queryParams' => request()->query()
-    //     ]);
-    // }
 
     public function index()
     {
@@ -271,11 +192,12 @@ class ResearchPaperController extends Controller
     {
         $query = [
             'query' => [
-                'nested' => [
-                    'path' => 'authors',
-                    'query' => [
-                        'term' => [
-                            'authors.id' => auth()->id(),
+                'bool' => [
+                    'must' => [
+                        [
+                            'term' => [
+                                'authors.id.keyword' => auth()->id(),
+                            ],
                         ],
                     ],
                 ],
@@ -289,7 +211,7 @@ class ResearchPaperController extends Controller
 
         $results = $this->elasticsearch->search($searchParams);
         $researches = collect($results['hits']['hits'])->map(function ($hit) {
-            return $hit['_source'];
+            return (object) $hit['_source'];
         });
 
         return inertia("Researches/Works", [
@@ -414,7 +336,7 @@ class ResearchPaperController extends Controller
         $response = $this->elasticsearch->get($params);
 
         return inertia("Researches/Show", [
-            'research' => new ResearchPaperResource($response['_source']),
+            'research' => new ResearchPaperResource((object) $response['_source']),
         ]);
     }
 
@@ -433,7 +355,6 @@ class ResearchPaperController extends Controller
                 ];
             });
 
-        // Fetch the research paper from Elasticsearch
         $params = [
             'index' => 'research_papers',
             'type' => '_doc',
@@ -441,7 +362,8 @@ class ResearchPaperController extends Controller
         ];
 
         $document = $this->elasticsearch->get($params);
-        $researchPaper = $document['_source'];
+        $researchPaper = (object) $document['_source'];
+
 
         return inertia("Researches/Publish", [
             'authorsSelection' => $authorsCollection,
@@ -510,17 +432,23 @@ class ResearchPaperController extends Controller
 
     protected function updateResearchPaper($id, $document)
     {
-        $params = [
+        $existsParams = [
             'index' => 'research_papers',
             'type' => '_doc',
             'id' => $id,
-            'body' => [
-                'doc' => $document,
-            ],
         ];
 
-        if ($this->elasticsearch->exists($params)) {
-            $this->elasticsearch->update($params);
+
+        if ($this->elasticsearch->exists($existsParams)) {
+            $updateParams = [
+                'index' => 'research_papers',
+                'type' => '_doc',
+                'id' => $id,
+                'body' => [
+                    'doc' => $document,
+                ],
+            ];
+            $this->elasticsearch->update($updateParams);
         }
     }
     /**

@@ -9,6 +9,9 @@ use Elasticsearch\ClientBuilder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +28,16 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        $admin = User::create([
+            'name' => 'Hayme Belgica',
+            'email' => 'jamesmatthewbelgica@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'admin',
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(10),
+
+
+        ]);
         $existingUsers = User::factory(10)->create();
 
         $params = ['index' => 'research_papers'];
@@ -60,6 +73,8 @@ class DatabaseSeeder extends Seeder
         foreach ($researchPapersData as $researchPaperData) {
             $researchPaperData['publish_date'] = Carbon::now()->subYears(rand(1, 10))->toIso8601String();
             $researchPaperData['modifier_id'] = User::inRandomOrder()->first()->id;
+            $researchPaperData['publication_status'] = fake()->randomElement(['Ongoing', 'Completed', 'Published', 'Presented']);
+            $researchPaperData['research_classification'] = fake()->randomElement(['Institutional Research', 'Self-Funded Research', 'Externally Funded Research']);
             $researchPapers[] = ResearchPaper::create($researchPaperData);
         }
 
@@ -92,9 +107,6 @@ class DatabaseSeeder extends Seeder
         });
 
         $params = ['body' => $documents];
-        $nani = $this->elasticsearch->bulk($params);
-        echo '<pre>';
-        var_dump($nani);
-        echo '</pre>';
+        $this->elasticsearch->bulk($params);
     }
 }

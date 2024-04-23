@@ -10,8 +10,6 @@ return [
     'discussion' => 'Our discussion delves into the nuanced implications of AI integration within the software development ecosystem, contextualizing empirical findings within broader theoretical frameworks. Through a critical analysis of survey results and relevant literature, we explore the underlying mechanisms driving AI\'s transformative influence on development practices. Discourse encompasses the potential benefits, challenges, and ethical considerations associated with widespread AI adoption, fostering a holistic understanding of its implications for software engineering stakeholders. Furthermore, we elucidate potential avenues for future research and development, highlighting areas ripe for innovation and exploration within the evolving AI-driven software landscape.',
     'conclusion' => 'In conclusion, this study underscores the profound impact of AI on contemporary software development, heralding a paradigm shift in industry practices and methodologies. Through empirical analysis and theoretical discourse, we have elucidated the transformative potential of AI-driven solutions in enhancing productivity, efficiency, and innovation across diverse development domains. As organizations increasingly embrace AI technologies to navigate complex challenges and capitalize on emerging opportunities, it is imperative for stakeholders to cultivate a nuanced understanding of AI\'s implications and ethical considerations. By fostering interdisciplinary collaboration and continuous innovation, the software development community can harness AI\'s transformative potential to drive sustainable growth and technological advancement.',
     'keywords' => 'AI, software development, productivity',
-    'publication_status' => 'Published',
-    'research_classification' => 'Institutional Research',
   ],
   [
     'title' => 'The Role of Machine Learning in Data Analysis',
@@ -22,7 +20,5 @@ return [
     'discussion' => 'Our discussion delves into the nuanced implications of integrating machine learning into data analysis workflows. Through a comprehensive analysis of survey findings and relevant literature, we explore the potential benefits, challenges, and future directions for leveraging machine learning in data analysis.',
     'conclusion' => 'In conclusion, machine learning emerges as a powerful tool for enhancing data analysis capabilities, offering new avenues for insight generation and decision-making. This study underscores the transformative potential of machine learning in optimizing analytical processes and driving innovation in data-driven decision-making.',
     'keywords' => 'Machine learning, data analysis, productivity',
-    'publication_status' => 'Published',
-    'research_classification' => 'Institutional Research',
   ],
 ];

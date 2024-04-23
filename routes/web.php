@@ -33,12 +33,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Reader routes
     Route::middleware('CheckRole:reader')->group(function () {
-
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+        Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
+        Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
+        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
+        Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
+        Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
+        Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
     });
 
     // Researcher routes
     Route::middleware('CheckRole:researcher')->group(function () {
-        // Route::resource('researches', ResearchPaperController::class)->except(['index']);
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+        Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
+        Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
+        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
+        Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
+        Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
+        Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
+    });
+
+    // Admin routes
+    Route::middleware('CheckRole:admin')->group(function () {
+
+    });
+
+    Route::middleware('CheckRole:researcher|reader|admin')->group(function () {
         Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
         Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
         Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
@@ -48,22 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
         Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
 
-
-
-    });
-
-    // Admin routes
-    Route::middleware('CheckRole:admin')->group(function () {
-
-    });
-
-    Route::middleware('CheckRole:researcher|reader')->group(function () {
-
-        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
-        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
-
-
-        // Route::resource('researches', ResearchPaperController::class)->only(['index', 'show']);
     });
 });
 
