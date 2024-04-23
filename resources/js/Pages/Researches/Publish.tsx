@@ -38,16 +38,13 @@ export default function Publish({
       : [auth.user.id],
   });
 
-
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    Object.keys(research?.data)?.length > 0
-      ? put(route("researches.update", research?.data?.id))
+    research?.data && Object.keys(research.data).length > 0
+      ? put(route("researches.update", research.data.id))
       : post(route("researches.store"));
   };
-
-  console.log(errors);
 
   return (
     <AuthenticatedLayout
