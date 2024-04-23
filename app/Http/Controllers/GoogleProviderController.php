@@ -50,7 +50,7 @@ class GoogleProviderController extends Controller
                 Auth::login($userInstance);
             }
 
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->intended(route('researches.index', absolute: false));
 
         } catch (\Exception $e) {
             return redirect('/login');

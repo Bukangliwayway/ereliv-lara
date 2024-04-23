@@ -18,58 +18,39 @@ Route::get('/', function () {
 });
 
 // Guest routes
-Route::middleware('guest')->group(function () {
-    Route::get('/guest/dashboard', function () {
-        return Inertia::render('Guest/Dashboard');
-    })->name('guest.dashboard');
-});
+
 
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
 
 
     // Reader routes
-    Route::middleware('CheckRole:reader')->group(function () {
-        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
-        Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
-        Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
-        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
-        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
-        Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
-        Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
-        Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
-    });
+
 
     // Researcher routes
-    Route::middleware('CheckRole:researcher')->group(function () {
-        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
-        Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
-        Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
-        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
-        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
-        Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
-        Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
-        Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
-    });
+
 
     // Admin routes
     Route::middleware('CheckRole:admin')->group(function () {
 
+
     });
 
-    Route::middleware('CheckRole:researcher|reader|admin')->group(function () {
-        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+    Route::middleware('CheckRole:researcher')->group(function () {
         Route::get('/researches/works', [ResearchPaperController::class, 'works'])->name('researches.works');
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
         Route::get('/researches/create', [ResearchPaperController::class, 'create'])->name('researches.create');
-        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
-        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
         Route::post('/researches', [ResearchPaperController::class, 'store'])->name('researches.store');
         Route::put('/researches/{id}', [ResearchPaperController::class, 'update'])->name('researches.update');
         Route::delete('/researches/{id}', [ResearchPaperController::class, 'destroy'])->name('researches.destroy');
+        Route::get('/researches/{id}/edit', [ResearchPaperController::class, 'edit'])->name('researches.edit');
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
 
+    });
+
+    Route::middleware('CheckRole:reader')->group(function () {
+        Route::get('/researches/', [ResearchPaperController::class, 'index'])->name('researches.index');
+        Route::get('/researches/{researchPaper}', [ResearchPaperController::class, 'show'])->name('researches.show');
     });
 });
 

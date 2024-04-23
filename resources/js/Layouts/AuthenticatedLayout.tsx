@@ -24,19 +24,8 @@ export default function Authenticated({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex">
-                <div className="shrink-0 flex items-center">
-                  <Link href={route("dashboard")}>
-                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                  </Link>
-                </div>
 
                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                  <NavLink
-                    href={route("dashboard")}
-                    active={route().current("dashboard")}
-                  >
-                    Dashboard
-                  </NavLink>
                   <NavLink
                     href={route("researches.index")}
                     active={route().current("researches.index")}
@@ -51,12 +40,6 @@ export default function Authenticated({
                       >
                         Works
                       </NavLink>
-                      {/* <NavLink
-                        href={route("dashboard")}
-                        active={route().current("dashboard")}
-                      >
-                        Requests
-                      </NavLink> */}
                     </>
                   )}
                 </div>
@@ -151,28 +134,16 @@ export default function Authenticated({
           >
             <div className="pt-2 pb-3 space-y-1">
               <ResponsiveNavLink
-                href={route("dashboard")}
-                active={route().current("dashboard")}
-              >
-                Dashboard
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                href={route("dashboard")}
-                active={route().current("dashboard")}
+                href={route("researches.index")}
+                active={route().current("researches.index")}
               >
                 Researches
               </ResponsiveNavLink>
               <ResponsiveNavLink
-                href={route("dashboard")}
-                active={route().current("dashboard")}
+                href={route("researches.works")}
+                active={route().current("researches.works")}
               >
                 Works
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                href={route("dashboard")}
-                active={route().current("dashboard")}
-              >
-                Requests
               </ResponsiveNavLink>
             </div>
             <div className="pt-4 pb-1 border-t border-gray-200">

@@ -31,7 +31,7 @@ export default function Show({ auth, research }: PageProps) {
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4 relative">
           <div className="space-x-2 flex flex-col items-center">
             <div className="flex gap-4 absolute top-2 right-5">
-              {research.data.editable && (
+              {research.data.editable && auth.user.role == "researcher" && (
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Ellipsis />

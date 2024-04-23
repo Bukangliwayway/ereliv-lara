@@ -113,7 +113,7 @@ class ResearchPaperController extends Controller
                     'query' => $keyword,
                     'fields' => ['title', 'abstract', 'keywords'],
                     'type' => 'most_fields',
-                    'fuzziness' => env('ELASTICSEARCH_FUZZINESS', '5'), // Use environment variable for fuzziness
+                    'fuzziness' => env('ELASTICSEARCH_FUZZINESS', '1'), // Use environment variable for fuzziness
                 ],
             ];
         }

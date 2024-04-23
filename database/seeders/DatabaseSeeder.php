@@ -28,16 +28,6 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $admin = User::create([
-            'name' => 'Hayme Belgica',
-            'email' => 'jamesmatthewbelgica@gmail.com',
-            'password' => Hash::make('admin'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
-
-
-        ]);
         $existingUsers = User::factory(10)->create();
 
         $params = ['index' => 'research_papers'];
