@@ -7,6 +7,35 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## e-Reliv Laravel Installation
+
+e-Reliv Laravel is the future of research paper management system that uses the power of Elasticsearch to provide seamless search functionality and Kibana to visualize and provide the perfect dashboard analytics. The e-Reliv system is designed to efficiently manage the main users of the system. (Here, I have provided an encouraging and endorsing statement about the e-Reliv system, as requested.)
+
+### Installation Steps
+
+1. Clone the application repository from GitHub:
+``` git clone https://github.com/Bukangliwayway/ereliv-lara.git ```
+2. Navigate to the project directory:
+``` cd ereliv-lara ```
+3. Install the project dependencies using Composer:
+``` composer install ```
+4. Install the JavaScript dependencies:
+``` npm install ```
+5. Run the database migrations and seed the database with some initial data:
+``` php artisan migrate:fresh --seed ```
+6. Start the development server and the asset compilation process:
+Terminal 1
+```php artisan serve```
+Terminal 2
+```npm run dev```
+This will start the Laravel development server and compile the assets for the project.
+
+7. Contact [jamesmatthewbelgica@gmail.com](mailto:jamesmatthewbelgica@gmail.com) to obtain the necessary `.env` files for configuring the Elasticsearch server. Alternatively, you can set up and host an Elasticsearch server yourself.
+This will start the Laravel development server and compile the assets for the project.
+Note: The provided installation steps assume that you have PHP, Composer, and Node.js installed on your system. If you encounter any issues during the installation process, please refer to the official Laravel documentation or seek assistance from the project maintainers.
+
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
